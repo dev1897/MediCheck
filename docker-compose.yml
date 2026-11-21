@@ -1,0 +1,38 @@
+# Despliegue local con PostgreSQL real: docker compose up --build
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: medicheck
+      POSTGRES_USER: medicheck
+      POSTGRES_PASSWORD: medicheck
+    ports:
+      - "5432:5432"
+    volumes:
+      - datos_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medicheck"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      DB_MODO: postgres
+      DATABASE_URL: postgres://medicheck:medicheck@db:5432/medicheck
+      JWT_SECRETO: secreto-local-de-desarrollo-cambiar
+      PUSH_MODO: simulado
+      CORREO_MODO: simulado
+      CARPETA_BUZON: /tmp/buzon
+      SIMULACION: "true"
+      SEED: "true"
+    ports:
+      - "3000:3000"
+
+volumes:
+  datos_pg:
