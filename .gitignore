@@ -1,0 +1,22 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Entorno y secretos
+.env
+*.pem
+serviceAccount*.json
+
+# Artefactos de simulación
+backend/buzon/
+backend/buzon-simulacion/
+backend/simulacion-resultados.json
+
+# Logs locales
+*.log
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
